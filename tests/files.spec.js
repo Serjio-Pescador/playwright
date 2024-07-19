@@ -4,11 +4,21 @@ const { test, expect } = require('@playwright/test');
 const { SlowBuffer } = require('buffer');
 
 
-test.describe('1.Files', () => {
+test.describe('1.Files', {
+  tag: '@1.Files',
+
+}, () => {
+  
+  // test.beforeAll('Setup', async () => {
+  //   console.log('1.Files');
+  // });
+
 
   test.beforeEach(async ({ page }, testInfo) => {
-    console.log(`Running ${testInfo.title}`);
+    console.log(`Running test: ${testInfo.tags}. ${testInfo.title}`);
+    console.log(`Test is: ${testInfo.status}`);
     await page.goto('http://localhost:4200/');
+    
   });
 
 
@@ -17,7 +27,7 @@ test.describe('1.Files', () => {
   //     maxDiffPixels: 400,    // allow no more than 110 different pixels.
   //   }); 
   // });
- 
+
   
 
   test('Есть кнопка файлы', async ({ page }) => {
@@ -180,7 +190,7 @@ test.describe('1.Files', () => {
   });
 
 
-  test('У кнопка сброс есть тултип', async ({ page }) => {            
+  test('Есть у кнопки сброс тултип', async ({ page }) => {            
     // нажатие кнопки файлы
     await page.getByRole('button').first().click();
 
