@@ -34,7 +34,7 @@ module.exports = defineConfig({
     // Emulates the user timezone.
     timezoneId: 'Europe/Moscow',
     // Viewport used for all pages in the context.
-    viewport: { width: 1280, height: 720 },
+    viewport: { width: 1600, height: 900 },
   },
 
   /* Configure projects for major browsers */

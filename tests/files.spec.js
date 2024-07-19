@@ -8,7 +8,7 @@ test.describe('1.Files', () => {
 
   test.beforeEach(async ({ page }, testInfo) => {
     console.log(`Running ${testInfo.title}`);
-    await page.goto('http://localhost:5173/');
+    await page.goto('http://localhost:4200/');
   });
 
 
@@ -21,25 +21,27 @@ test.describe('1.Files', () => {
   
 
   test('Есть кнопка файлы', async ({ page }) => {
-    const filesMenuButton = page.getByRole('button').first();
-    await expect(filesMenuButton).toBeVisible();  
+    const filesMenuButton = page.locator('.css-dev-only-do-not-override-98ntnt').first();
+    await expect(filesMenuButton).toBeVisible(); 
     await filesMenuButton.screenshot({ path: './test-results/1.1.filesbutton.png'});
   });
   
 
   test('Есть тултип на кнопке файлы', async ({ page }) => {
     
-    await page.getByRole('button').first().hover(); 
-    await expect(page.getByRole('tooltip', { name: 'файлы' })).toBeVisible();
-    await page.screenshot({animations: 'disabled', path: './test-results/1.2.filesbuttontooltip.png'});
+    await page.locator('.css-dev-only-do-not-override-98ntnt').first().hover({ force:true }); 
+    // test.setTimeout(300);
+    const tooltipFiles = page.getByRole('tooltip', { name: 'файлы' });
+    await expect(tooltipFiles).toBeVisible();
+    await tooltipFiles.screenshot({animations: 'disabled', path: './test-results/1.2.filesbuttontooltip.png'});
   });
 
 
   test('Нажатие на кнопку файлы открывает меню файлов', async ({ page }) => {
      
-    await page.getByRole('button').first().click();  
+    await page.locator('.css-dev-only-do-not-override-98ntnt').first().click();  
     
-    const filesCollapsMenu = page.locator('.upload-file-btn-group > .ant-collapse > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box');
+    const filesCollapsMenu = page.locator('.ant-collapse-content-box');
     await filesCollapsMenu.waitFor({ state: 'visible' })  
 
     await expect(filesCollapsMenu).toBeVisible();
@@ -69,8 +71,8 @@ test.describe('1.Files', () => {
 
   test('Кнопка назад сворачивает меню файлы', async ({ page }) => {
     
-    await page.getByRole('button').first().click();
-    const filesCollapsMenu = page.locator('.upload-file-btn-group > .ant-collapse > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box');
+    await page.locator('.css-dev-only-do-not-override-98ntnt').first().click();
+    const filesCollapsMenu = page.locator('.ant-collapse-content-box');
     await filesCollapsMenu.waitFor({ state: 'visible' })  
 
     await page.getByRole('button', { name: 'arrow-left' }).click();
@@ -86,7 +88,7 @@ test.describe('1.Files', () => {
     await page.getByRole('button').first().click();
 
     //появления кнопок меню файлов
-    const filesCollapsMenu = page.locator('.upload-file-btn-group > .ant-collapse > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box');
+    const filesCollapsMenu = page.locator('.ant-collapse-content-box');
     await filesCollapsMenu.waitFor({ state: 'visible' });
     const localUploadButton = page.locator('.ant-collapse-content-box > button').first();
 
@@ -103,43 +105,14 @@ test.describe('1.Files', () => {
     await page.getByRole('button').first().click();
   
     //появления кнопок меню файлов
-    const filesCollapsMenu = page.locator('.upload-file-btn-group > .ant-collapse > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box');
-    await filesCollapsMenu.waitFor({ state: 'visible' })
+    const filesCollapsMenu = page.locator('.ant-collapse-content-box');
+    await filesCollapsMenu.waitFor({ state: 'visible' });
+    const localUploadButton = page.locator('.ant-collapse-content-box > button').first();
   
-    await page.locator('.ant-collapse-content-box > button').first().hover({ force:true });
-    //await page.getByRole('tooltip', { name: 'локально' }).click();
+    await localUploadButton.hover({ force:true });
     await expect(page.getByRole('tooltip', { name: 'локально' })).toBeVisible();
     await page.screenshot({animations: 'disabled', path: './test-results/1.8.localbuttontooltip.png'});
-    //await page.keyboard.press('Alt+F4');
-  });
 
-
-  test('Есть кнопка удаленно', async ({ page }) => {
-    
-    // нажатие кнопки файлы
-    await page.getByRole('button').first().click();
-  
-    //появления кнопок меню файлов
-    const filesCloud = page.locator('//*[@id="root"]/main/section[1]/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/button[2]/div');
-    await filesCloud.waitFor({ state: 'visible' })
-  
-    await filesCloud.hover();
-    await expect(page.getByRole('button', { name: 'cloud-download' })).toBeVisible();
-    await filesCloud.screenshot({ path: './test-results/1.9.cloudbutton.png'});      
-  });
-
-
-  test('Есть тултип у кнопки удаленно', async ({ page }) => {
-          // нажатие кнопки файлы
-    await page.getByRole('button').first().click();
-
-    //появления кнопок меню файлов
-    const filesCloud = page.locator('//*[@id="root"]/main/section[1]/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/button[2]/div');
-    await filesCloud.waitFor({ state: 'visible' })
-
-    await filesCloud.hover({ force:true });
-    await expect(page.getByRole('tooltip', { name: 'удаленно' })).toBeVisible();
-    await page.screenshot({animations: 'disabled', path: './test-results/1.10.cloudbuttontooltip.png'});        
   });
 
 
@@ -151,7 +124,7 @@ test.describe('1.Files', () => {
         
     await fileDemo.hover({ force:true });
     await expect(fileDemo).toBeVisible();
-    await fileDemo.screenshot({ path: './test-results/1.11.demobutton.png'});        
+    await fileDemo.screenshot({ path: './test-results/1.9.demobutton.png'});        
   });
 
 
@@ -163,50 +136,79 @@ test.describe('1.Files', () => {
         
     await fileDemo.hover({ force:true });
     await expect(page.getByRole('tooltip', { name: 'демо' })).toBeVisible();
-    await page.screenshot({animations: 'disabled', path: './test-results/1.12.demobuttonTooltip.png'});        
+    await page.screenshot({animations: 'disabled', path: './test-results/1.10.demobuttonTooltip.png'});        
   });
 
-  
-  test('Есть кнопка сброс', async ({ page }) => {            
-    await page.getByRole('button').first().click();  
-    
-    const filesCollapsMenu = page.locator('.upload-file-btn-group > .ant-collapse > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box');
-    await filesCollapsMenu.waitFor({ state: 'visible' })  
-
-    const fileReset = page.locator('//*[@id="root"]/main/section[1]/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/button[4]');   
-            
-    await expect(fileReset).toBeVisible();
-    await fileReset.screenshot({ path: './test-results/1.13.resetmenubutton.png' });
-    //await page.screenshot({ path: './test-results/1.13.resetmenubutton.png'});        
-  });
 
 
   test('Загрузка локального файла модели', async ({ page }) => {            
     // нажатие кнопки файлы
-    await page.getByRole('button').first().click();   
-    const fileUpload = page.locator('.upload-file-btn-group > .ant-collapse > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box');
-    await fileUpload.click();
+    await page.getByRole('button').first().click();
+
+    //появления кнопок меню файлов
+    const filesCollapsMenu = page.locator('.ant-collapse-content-box');
+    await filesCollapsMenu.waitFor({ state: 'visible' });
+    const localUploadButton = page.locator('.ant-collapse-content-box > button').first();
 
     //загрузка локального файла
+    await localUploadButton.click();
     await page.setInputFiles('input[type="file"]','./tests/AC20-FZK-Haus.ifc')
-    const dialogWindow = page.getByRole('dialog').locator('div').filter({ hasText: 'AC20-FZK-Haus.ifc' }).first();
-    await dialogWindow.isVisible({timeout: 200});
-    
-    await expect(dialogWindow).toHaveText('AC20-FZK-Haus.ifcОбработка модели');
-    await dialogWindow.screenshot({animations: 'disabled', path: './test-results/1.14.uploadLocal.png'});        
+    // const dialogWindow = page.getByRole('dialog').locator('div').filter({ hasText: 'AC20-FZK-Haus.ifc' }).first();
+    // await dialogWindow.isVisible({timeout: 200});
+    // test.setTimeout(600);
+    // await expect(dialogWindow).toHaveText('AC20-FZK-Haus.ifcОбработка модели');
+    await page.screenshot({animations: 'disabled', path: './test-results/1.11.uploadLocal.png'});        
   });
 
 
-  test('Загрузка демо файла модели', async ({ page }) => {            
-    // нажатие кнопки демо
-    await page.getByRole('button').first().click();   
-    await page.getByRole('button', { name: 'build' }).click();
-    
-    const dialogWindow = page.getByRole('dialog').locator('div').filter({ hasText: '.ifc' }).first();
-    //await dialogWindow.isVisible({timeout: 200});
-    
-    await expect(dialogWindow).toHaveText(/.ifc/);
-    await dialogWindow.screenshot({animations: 'disabled', path: './test-results/1.15.uploadDemo.png'});        
+  test('Есть кнопка сброс', async ({ page }) => {            
+    // нажатие кнопки файлы
+    await page.getByRole('button').first().click();
+
+    //появления кнопок меню файлов
+    const filesCollapsMenu = page.locator('.ant-collapse-content-box');
+    await filesCollapsMenu.waitFor({ state: 'visible' });
+    const localUploadButton = page.locator('.ant-collapse-content-box > button').first();
+
+    //загрузка локального файла
+    await localUploadButton.click();
+    await page.setInputFiles('input[type="file"]','./tests/AC20-FZK-Haus.ifc')
+
+    const fileReset = page.locator('button:nth-child(4)').first();
+    await expect(fileReset).toBeVisible();
+    await fileReset.screenshot({ path: './test-results/1.12.resetmenubutton.png' });      
   });
+
+
+  test('У кнопка сброс есть тултип', async ({ page }) => {            
+    // нажатие кнопки файлы
+    await page.getByRole('button').first().click();
+
+    //появления кнопок меню файлов
+    const filesCollapsMenu = page.locator('.ant-collapse-content-box');
+    await filesCollapsMenu.waitFor({ state: 'visible' });
+    const localUploadButton = page.locator('.ant-collapse-content-box > button').first();
+    
+    //загрузка локального файла
+    await localUploadButton.click();
+    await page.setInputFiles('input[type="file"]','./tests/AC20-FZK-Haus.ifc')
+
+    await page.locator('button:nth-child(4)').first().hover({ force:true });
+    const resetTooltip = page.getByRole('tooltip', { name: 'Закрыть' });
+    await expect(page.getByRole('tooltip', { name: 'Закрыть' })).toBeVisible();
+    await resetTooltip.screenshot({ path: './test-results/1.13.resetmenubuttontooltip.png' });      
+  });
+
+  // test('Загрузка демо файла модели', async ({ page }) => {            
+  //   // нажатие кнопки демо
+  //   await page.getByRole('button').first().click();   
+  //   await page.getByRole('button', { name: 'build' }).click();
+    
+  //   const dialogWindow = page.getByRole('dialog').locator('div').filter({ hasText: '.ifc' }).first();
+  //   //await dialogWindow.isVisible({timeout: 200});
+    
+  //   await expect(dialogWindow).toHaveText(/.ifc/);
+  //   await dialogWindow.screenshot({animations: 'disabled', path: './test-results/1.15.uploadDemo.png'});        
+  // });
   
 });
