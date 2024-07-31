@@ -39,7 +39,8 @@ def before_each_after_each(page: Page):
     # Go to the starting url before each test.
     page.goto(str(base_url))
     yield
-    print("Все тесты были запущены")
+    print("Тест был запущен.")
+
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
