@@ -16,5 +16,5 @@ class Input(PageElement):
             self._find_element(**kwargs).fill(value=text)
 
     def clear(self, **kwargs):
-        with allure.step(f'Отчистить {self._type_of}: "{self._format_name(**kwargs)}".'):
+        with allure.step(f'Очистить {self._type_of}: "{self._format_name(**kwargs)}".'):
             self._find_element(**kwargs).clear()

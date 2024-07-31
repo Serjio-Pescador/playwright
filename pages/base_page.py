@@ -1,9 +1,6 @@
 import json
-
 import allure
-
 from singleton import BaseUrlSingleton
-
 from playwright.sync_api import Page, expect
 
 

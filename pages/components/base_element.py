@@ -1,8 +1,6 @@
 import allure
 from playwright.async_api import Page
-
 from abc import abstractmethod, ABC
-
 from playwright.sync_api import expect, Locator
 
 
