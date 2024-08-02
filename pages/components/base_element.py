@@ -32,9 +32,11 @@ class PageElement(ABC):
         with allure.step(f'Нажать {self._type_of}: "{self._format_name(**kwargs)}".'):
             self._find_element(**kwargs).click()
 
-    def hover(self, **kwargs):
+
+    def hover(self, expect_visible=True, **kwargs):
         with allure.step(f'Навести курсор на {self._type_of}: "{self._format_name(**kwargs)}".'):
-            self._find_element(**kwargs).hover()
+            element = self._find_element(expect_visible=expect_visible, **kwargs)
+            element.hover(force=True)
 
     def assert_visibility(self, is_visible=True, **kwargs):
         text_report = 'Отображается' if is_visible else 'Не отображается'

@@ -11,7 +11,7 @@ def base_url(request):
 
 
 def pytest_addoption(parser):
-    parser.addoption('--browser_name', action='store', default="chrome",
+    parser.addoption('--browser_name', action='store', default="chromium",
                      help='Браузер для запуска тестов')
     parser.addoption('--headless', action='store_true', default=None,
                      help='Запуск браузера без окна')
@@ -33,12 +33,15 @@ def setup_base_url(request):
     BaseUrlSingleton.set_base_url(base_url)
 
 
+
+
 @pytest.fixture(scope="function", autouse=True)
 def before_each_after_each(page: Page):
     print("Running test: ")
     # Go to the starting url before each test.
     page.goto(str(base_url))
     yield
+    page.screenshot(animations="disabled", path="./screen/1.png")
     print("Тест был запущен.")
 
 

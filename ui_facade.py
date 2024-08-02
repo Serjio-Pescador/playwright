@@ -1,7 +1,7 @@
 from singleton import BaseUrlSingleton
 
-class ViewerPage:
-    viewer_page = BaseUrlSingleton
+class UiFacade:
+    UiFacade = BaseUrlSingleton
 
     def __init__(self):
         # self._browser = PlaywrightSingleton.get_page()
