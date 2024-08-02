@@ -1,23 +1,18 @@
 import allure
-import pages.base_page
 import pytest
-from playwright.sync_api import Page, expect
-from pages.main_page.main_page import MainPage
-from pages.main_page.locators import MainFilesLocators as Locators
-from singleton import BaseUrlSingleton
-from pages.components.base_element import *
 
 
-@pytest.fixture()
-def files_btn():
-    MainPage()
+@pytest.mark.viewer
+class TestUiViewer:
 
-
-@allure.title('Тесты Viewer')
-@allure.description('Проверка наличия кнопки Файлы на стартовой странице')
-@allure.story('кнопка Файлы')
-def test_btn_files():
-    pass
+    @allure.title('Тесты Viewer')
+    @allure.description('Проверка наличия кнопки Файлы на стартовой странице')
+    @allure.story('кнопка Файлы')
+    def test_btn_files(self, ui):
+        ui.viewer_page.open_page()
+        ui.viewer_page.button_files.click()
+        ui.viewer_page.button_files.screenshot(path="./1.png")
+        pass
 
 
 # @allure.title('Тесты Viewer')

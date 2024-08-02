@@ -9,7 +9,7 @@ class BasePage:
         self._page = page
         self.host = BaseUrlSingleton.get_base_url()
 
-    def open_page(self, route: str = None):
+    def open_page(self):
         url = self
         self._page.goto(url, wait_until='domcontentloaded')
 

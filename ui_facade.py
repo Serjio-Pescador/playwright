@@ -1,10 +1,12 @@
-from singleton import BaseUrlSingleton
+from singleton import BaseUrlSingleton, PlaywrightSingleton
+from pages.main_page.main_page import MainPage
+
 
 class UiFacade:
-    UiFacade = BaseUrlSingleton
+    viewer_page: 'MainPage'
 
     def __init__(self):
-        # self._browser = PlaywrightSingleton.get_page()
+        self._browser = PlaywrightSingleton.get_page()
         self._base_url = BaseUrlSingleton.get_base_url()
         self._page_instances = {}
 
@@ -15,7 +17,7 @@ class UiFacade:
 
     def _initialize_page(self, name):
         page_classes = {
-            "viewer_page": BaseUrlSingleton,
+            'viewer_page': MainPage
         }
         if name in page_classes:
             return page_classes[name]()
