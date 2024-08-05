@@ -1,6 +1,5 @@
 from pages.components.tooltip import Tooltip
 from pages.components.button import Button
-from pages.components.upload_files import UploadFiles
 from pages.base_page import BasePage
 
 
@@ -22,8 +21,6 @@ class ViewerPage(BasePage):
         self.demo_tt = Tooltip(self._page, locator="//*[contains(text(),'демо')]", name='ТТ демо')
         self.reset = Button(self._page, locator="//*[@data-testid='menu-btn-files-reset']", name='Reset')
         self.reset_tt = Tooltip(self._page, locator="//*[contains(text(),'Сбросить модель')]", name='ТТ Сбросить')
-        # self.upload = UploadFiles.set_files(self._page.set_input_files(selector="Upload file", files="./files/AC20-FZK-Haus.ifc"))
-        # UploadFiles.set_files(self._page.set_input_files(selector="Upload file", files="./files/AC20-FZK-Haus.ifc"))
 
     def files_expand(self,):
         self.files.click()
