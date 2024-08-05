@@ -7,7 +7,7 @@ from playwright.sync_api import expect, Locator
 
 
 class PageElement(ABC):
-    def __init__(self, page: Page, locator: str, name: str):
+    def __init__(self, page: Page, locator: str, name: str) -> object:
         self.page = page
         self.locator = locator
         self.name = name
@@ -49,4 +49,8 @@ class PageElement(ABC):
     def assert_text_eql(self, text, **kwargs):
         with allure.step(f'Assert: "{self._type_of}" - "{self._format_name(**kwargs)}" {text} на странице.'):
             expect(self._find_element(**kwargs)).to_have_text(text)
+
+    def upload(self, **kwargs):
+        with allure.step(f'Загрузить файл {self._type_of}: "{self._format_name(**kwargs)}".'):
+            self.page.get_by_label('Upload files').set_input_files(**kwargs)
 # Можно сделать отдельно работу с таблицами? модальными окнами

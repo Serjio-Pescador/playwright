@@ -1,12 +1,11 @@
 import allure
-
-from singleton import BaseUrlSingleton
 import pytest
+from singleton import BaseUrlSingleton
+
 
 
 @pytest.mark.regress
 class TestUi:
-
 
     @allure.story('Viewer')
     @allure.title('Check page URL')
@@ -18,7 +17,6 @@ class TestUi:
         # Assert
         viewer_page.assert_url_window_eql(expected_url)
 
-
     @allure.story('Viewer')
     @allure.title('Check Files button')
     def test_files_btn(self, viewer_page):
@@ -26,7 +24,6 @@ class TestUi:
         viewer_page.open_page()
         # Assert
         viewer_page.files.assert_visibility()
-
 
     @allure.story('Viewer')
     @allure.title('Check Back button')
@@ -37,7 +34,6 @@ class TestUi:
         # Assert
         viewer_page.back.assert_visibility()
 
-
     @allure.story('Viewer')
     @allure.title('Check Local button')
     def test_local_btn(self, viewer_page):
@@ -46,7 +42,6 @@ class TestUi:
         viewer_page.files_expand()
         # Assert
         viewer_page.local.assert_visibility()
-
 
     @allure.story('Viewer')
     @allure.title('Check Demo button')
@@ -57,13 +52,11 @@ class TestUi:
         # Assert
         viewer_page.demo.assert_visibility()
 
-
     @allure.story('Viewer')
     @allure.title('Upload file')
     def test_open_ifc(self, viewer_page):
         # Act
         viewer_page.open_page()
-        viewer_page.files_expand()
-        viewer_page.local_upload("./files/AC20-FZK-Haus.ifc")
+        viewer_page.local_upload()
         # Assert
-        # viewer_page.upload("./files/AC20-FZK-Haus.ifc")
+        viewer_page.reset.assert_visibility()

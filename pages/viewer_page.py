@@ -16,16 +16,17 @@ class ViewerPage(BasePage):
         self.local = Button(self._page, locator="//*[@data-testid='menu-btn-files-local']", name='Local')
         self.back = Button(self._page, locator="//*[@data-testid='menu-btn-back']", name='Back')
         self.demo = Button(self._page, locator="//*[@data-testid='menu-btn-files-demo']", name='Demo')
-        self.upload = UploadFiles(self._page, locator="./files/AC20-FZK-Haus.ifc", name="file.ifc")
-
+        self.reset = Button(self._page, locator="//*[@data-testid='menu-btn-files-reset']", name='Reset')
+        # self.upload = UploadFiles.set_files(self._page.set_input_files(selector="Upload file", files="./files/AC20-FZK-Haus.ifc"))
+        # UploadFiles.set_files(self._page.set_input_files(selector="Upload file", files="./files/AC20-FZK-Haus.ifc"))
 
     def files_expand(self,):
-            self.files.click()
+        self.files.click()
 
-    def local_upload(self, path):
-            self.files.click()
-            self.local.click()
-            self.upload(path)
+    def local_upload(self,):
+        self.files_expand()
+        self.local.click()
+        self.ifc_upload()
 
 
 

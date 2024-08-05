@@ -16,6 +16,10 @@ class BasePage:
         url = f"{self.host}{route}" if route else self.host
         self._page.goto(url, wait_until='domcontentloaded')
 
+    def ifc_upload(self):
+        self._page.set_input_files('input[type="file"]',"./files/AC20-FZK-Haus.ifc")
+        expect(self._page.get_by_test_id('menu-btn-files-reset')).to_be_enabled()
+        self._page.screenshot(path='./screenshots/uploaded.png')
 
     def close_page(self):
         self._page.close()
