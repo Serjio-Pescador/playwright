@@ -1,6 +1,8 @@
 import allure
 from playwright.async_api import Page
+
 from abc import abstractmethod, ABC
+
 from playwright.sync_api import expect, Locator
 
 
@@ -32,11 +34,9 @@ class PageElement(ABC):
         with allure.step(f'Нажать {self._type_of}: "{self._format_name(**kwargs)}".'):
             self._find_element(**kwargs).click()
 
-
-    def hover(self, expect_visible=True, **kwargs):
+    def hover(self, **kwargs):
         with allure.step(f'Навести курсор на {self._type_of}: "{self._format_name(**kwargs)}".'):
-            element = self._find_element(expect_visible=expect_visible, **kwargs)
-            element.hover(force=True)
+            self._find_element(**kwargs).hover()
 
     def assert_visibility(self, is_visible=True, **kwargs):
         text_report = 'Отображается' if is_visible else 'Не отображается'

@@ -1,6 +1,9 @@
 import json
+
 import allure
+
 from singleton import BaseUrlSingleton
+
 from playwright.sync_api import Page, expect
 
 
@@ -9,8 +12,8 @@ class BasePage:
         self._page = page
         self.host = BaseUrlSingleton.get_base_url()
 
-    def open_page(self):
-        url = self
+    def open_page(self, route: str = None):
+        url = f"{self.host}{route}" if route else self.host
         self._page.goto(url, wait_until='domcontentloaded')
 
 
