@@ -1,45 +1,58 @@
 import allure
 import pytest
 import os
-from playwright.sync_api import sync_playwright, Page
+from playwright.sync_api import Page
 
 from pages.viewer_page import ViewerPage
-from singleton import BaseUrlSingleton
+from singleton import BaseUrlSingleton, PlaywrightSingleton
+from del_checklist import clean_room_checklists
+from dotenv import load_dotenv
 
-
-
-@pytest.fixture(scope="session")
-def base_url(request):
-    return request.config.getoption("--base_url")
-
+load_dotenv()
 
 def pytest_addoption(parser):
-    parser.addoption('--browser_name', action='store', default="chrome",
+    parser.addoption('--browser_name', action='store', default="chromium",
                      help='Браузер для запуска тестов')
-    parser.addoption('--headless', action='store_true', default=None,
+    parser.addoption('--headless', action='store_true', default=False,
                      help='Запуск браузера без окна')
-    parser.addoption('--base_url', action='store', default=os.getenv("HOST", "http://localhost:4200/"),
+    parser.addoption('--base_url', action='store', default=os.getenv("HOST", 'http://localhost:4200/'),
                      help='Выберите хост, для работы тестов')
 
 
-@pytest.fixture(scope='session')
-def chromium_page(base_url) -> Page:
-    with sync_playwright() as playwright:
-        chromium = playwright.chromium.launch(headless=True)
-        yield chromium.new_page()
-        chromium.close()
-
-
-
-@pytest.fixture(scope="function")
-def viewer_page(chromium_page):
-    return ViewerPage(chromium_page)
+# @pytest.fixture(scope="session")
+# def base_url(request):
+#     return request.config.getoption("--base_url")
 
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_base_url(request):
-    base_url = request.config.getoption("--base_url")
+    base_url = request.config.getoption("--base_url") or os.getenv("HOST", 'http://localhost:4200/')
+
     BaseUrlSingleton.set_base_url(base_url)
+    return
+
+@pytest.fixture(scope='session')
+def browser(request) -> Page:
+    browser_name = request.config.getoption('--browser_name')
+    headless = request.config.getoption('--headless')
+
+    PlaywrightSingleton.initialize_browser(browser_name, headless)
+    page = PlaywrightSingleton.get_page()
+    yield page
+    PlaywrightSingleton.close_browser()
+
+
+@pytest.fixture(scope="function")
+def viewer_page(browser):
+    url = BaseUrlSingleton.get_base_url()
+    browser.goto(url, wait_until='domcontentloaded')
+    return ViewerPage()
+
+
+@pytest.fixture(scope="function")
+def viewer_delete_checklist():
+    clean_room_checklists()
+    return
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)

@@ -1,14 +1,12 @@
 import allure
-from playwright.async_api import Page
-
 from abc import abstractmethod, ABC
-
+from singleton import PlaywrightSingleton
 from playwright.sync_api import expect, Locator
 
 
 class PageElement(ABC):
-    def __init__(self, page: Page, locator: str, name: str) -> object:
-        self.page = page
+    def __init__(self, locator: str, name: str) -> object:
+        self.page = PlaywrightSingleton.get_page()
         self.locator = locator
         self.name = name
 
@@ -50,7 +48,22 @@ class PageElement(ABC):
         with allure.step(f'Assert: "{self._type_of}" - "{self._format_name(**kwargs)}" {text} на странице.'):
             expect(self._find_element(**kwargs)).to_have_text(text)
 
-    def upload(self, **kwargs):
-        with allure.step(f'Загрузить файл {self._type_of}: "{self._format_name(**kwargs)}".'):
-            self.page.get_by_label('Upload files').set_input_files(**kwargs)
-# Можно сделать отдельно работу с таблицами? модальными окнами
+    def to_have_attribute(self, name, value, **kwargs):
+        with allure.step(f'Есть атрибут у элемента {self._type_of}: "{self._format_name(**kwargs)}".'):
+            expect(self._find_element(**kwargs)).to_have_attribute(name, value)
+
+    def to_be_enabled(self, is_enable=True, **kwargs):
+        text_report = 'Акивный' if is_enable else 'Не акивный'
+        with allure.step(f'Assert: "{self._type_of}" - "{self._format_name(**kwargs)}" {text_report} на странице.'):
+            if is_enable:
+                expect(self._find_element(**kwargs)).to_be_enabled()
+            else:
+                expect(self._find_element(**kwargs)).not_to_be_enabled()
+
+    def count(self, count, **kwargs):
+        with allure.step(f'Есть атрибут у элемента {self._type_of}: "{self._format_name(**kwargs)}".'):
+            expect(self._find_element(**kwargs)).to_have_count(count)
+
+    def press(self, **kwargs):
+        with allure.step(f'Зажать и подвигать {self._type_of}: "{self._format_name(**kwargs)}".'):
+            self.page.press(self.locator, **kwargs)
